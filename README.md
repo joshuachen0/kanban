@@ -1,1 +1,1 @@
-# kanban
+# Minimalist Kanban
