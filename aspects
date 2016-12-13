@@ -1,0 +1,7 @@
+Aspects:
+
+1. Allow user to specify number of columns and rows that correspond to the number of possible areas a kanban is in and the number of kanbans that can be in an area. Specify as a dictionary? (area name, max size of area)
+2. Make it run continuously, but also be able to save kanbans. Record kanban data with data in text files.
+3. Make a nice text display for listing the kanbans, both in total, in a single area, and a single kanban.
+4. Draw out on paper what needs to be done for every kanban (i.e. what input we need from the user for a kanban). Also draw out the text display of the kanbans and areas.
+5. FUTURE: make graphical interface.
