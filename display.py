@@ -8,12 +8,15 @@
 +-------+-------+------+
 """
 
-def display(num, names, heights, contents)
-    num_of_areas = num # User input
-    area_names = names # User input
+def display(num, names, heights, contents):
+    # Number of areas
+    num_of_areas = num
+    # Names of areas
+    area_names = names
     # Initialize widths of areas
     widths = [len(name) for name in area_names]
-    sizes = heights # User input
+    # Number of spaces available in each area
+    sizes = heights
 
     # Generate textual display of kanban
     h_div = ''
@@ -35,8 +38,14 @@ def display(num, names, heights, contents)
             if width is widths[len(widths)-1]:
                 display += '|\n'
     display += h_div
+    print(display)
 
 if __name__ == "__main__":
-    num_of_areas = 3
-    area_names = ['To do', 'Doing', 'Done']
-    sizes = [3, 3, 3]
+    num_of_areas = input('Number of areas: ')
+    #area_names = ['To do', 'Doing', 'Done']
+    area_names = []
+    sizes = []
+    for i in range(num_of_areas):
+        area_names.append(raw_input('Name of area %d: ' % (i+1)))
+        sizes.append(input('Size of area %d: ' % (i+1)))
+    #sizes = [3, 3, 3]
