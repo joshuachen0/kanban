@@ -1,8 +1,10 @@
 class kanban(object):
     """
+    class docstring
     """
     def __init__(self, file_name):
         """
+        function docstring
         """
         self.name = file_name
         self.num_of_areas = 0
@@ -19,6 +21,7 @@ class kanban(object):
         self.display = ''
     def store_data(self):
         """
+        function docstring
         """
         with open(self.name, 'w') as f:
             for i in range(self.num_of_areas):
@@ -29,6 +32,7 @@ class kanban(object):
                 f.write(line)
     def store_display(self):
         """
+        function docstring
         """
         with open((self.name + '-nice.txt'), 'w') as f:
             # Find width of each area
@@ -78,15 +82,19 @@ class kanban(object):
             f.write(self.display)
     def print_display(self):
         """
+        function docstring
         """
         print(self.display)
     def add_task(self, task):
         """
+        function docstring
         Add task
         """
         # Return task number
         store_data()
     def rem_task(self, task):
         """
+        function docstring
+        remove task
         """
         store_data()
