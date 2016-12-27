@@ -23,45 +23,38 @@ class kanban(object):
                 self.area_names.append(temp[0])
                 self.sizes.append(int(temp[1]))
                 try:
-                    self.tasks.append(temp[2:len(temp)-1])
+                    self.tasks.append(filter(None, temp[2:len(temp)-1]))
                 except IndexError:
                     self.tasks.append([])
         self.display = ''
         self.generate_display()
         self.store_display()
 
-    """
-    def get_tasks(self):
+    def store_data(self):
         """
-        Returns a dictionary of task numbers : task names.
+        Stores data in interpretable format into file with the name `self.name`.
 
         Inputs:
             ---NONE---
-        Outputs:
-            tasks_dict: a dictionary of task numbers : task names of tasks in 
-                this kanban board
-        """
-        tasks_dict = {}
-        for tasks in self.tasks:
-            for task in tasks:
-                temp = task.split(' ')
-                tasks_dict[int(temp[0])] = ' '.join(temp[1:len(temp)])
-        return tasks_dict
-    """
-
-    def store_data(self):
-        """
-        function docstring
+        Outpus:
+            ---NONE---
         """
         with open(self.name, 'w') as f:
             for i in range(self.num_of_areas):
                 [an, s, t] = [self.area_names[i], self.sizes[i], self.tasks[i]]
-                line = an + ('|%d|' % s) + '|'.join(t) + '|'
-                if i is not (self.num_of_areas-1):
-                    line += '\n'
+                line = an + ('|%d|' % s) + '|'.join(t) + '|' + '\n'
                 f.write(line)
 
     def generate_display(self):
+        """
+        Generates the display from the data of an instance of this class. Stores 
+        generated display in `self.display`.
+
+        Inputs:
+            ---NONE---
+        Outputs:
+            ---NONE---
+        """
         # Find width of each area
         widths = []
         for i in range(len(self.tasks)):
@@ -107,14 +100,25 @@ class kanban(object):
 
     def store_display(self):
         """
-        function docstring
+        Writes the display in `self.display` to a text file with '-nice.txt' 
+        appended to the file name.
+
+        Inputs:
+            ---NONE---
+        Outputs:
+            ---NONE---
         """
         with open((self.name + '-nice.txt'), 'w') as f:
             f.write(self.display)
 
     def print_display(self):
         """
-        function docstring
+        Prints the display in `self.display`.
+
+        Inputs:
+            ---NONE---
+        Outputs:
+            ---NONE---
         """
         print(self.display)
 
@@ -128,45 +132,53 @@ class kanban(object):
         Outputs:
             new_task_num: Number of the added task
         """
-        # Return task number
-        num_of_tasks = sum(len(task) for task in self.tasks)
-        new_task_num = num_of_tasks + 1
+        # Take first available task number
+        task_nums = [int(tk.split(' ')[0]) for tks in self.tasks for tk in tks]
+        filt_fun = lambda n : n not in task_nums
+        new_task_num = filter(filt_fun, range(1, max(task_nums) + 1))[0]
         # Check to see that size of first area is not exceeded
         if len(self.tasks[0]) < self.sizes[0]:
-            self.tasks[0].append(new_task_num + ' ' + task_name)
-            store_data()
+            self.tasks[0].append(str(new_task_num) + ' ' + task_name)
+            self.store_data()
         else:
-            raise AreaOutOfSpaceError(self.tasks[0])
+            raise AreaOutOfSpaceError(self.area_names[0])
+        return new_task_num
 
     def rem_task(self, task_num):
         """
-        function docstring
-        remove task
+        Remove a task from the kanban board specified by the task number if it 
+        exists. Otherwise, raise a TaskDoesNotExistError.
+
+        Inputs:
+            task_num: Number of task to be removed
+        Outputs:
+            ---NONE---
         """
-        tasks_nums = [int(tk.split(' ')[0]) for tks in self.tasks for tk in tks]
-        if task_num in tasks_nums:
-            for i in range(len(self.tasks))
+        task_nums = [int(tk.split(' ')[0]) for tks in self.tasks for tk in tks]
+        if task_num in task_nums:
+            for i in range(len(self.tasks)):
                 for tk in self.tasks[i]:
                     if int(tk.split(' ')[0]) is task_num:
                         area_index = i
-                        area = area_names[area_index]
+                        area = self.area_names[area_index]
                         task = tk
-            choice = raw_input('Remove task %s from area %s?' % (task, area))
-            if choice is 'y':
+            choice = raw_input('Do you want to remove task \'%s\' from area \'%s\'?(Y/n)' % (task, area))
+            if choice in ['', 'y', 'Y', 'yes', 'ye', 'yea', 'ok', 'yeah']:
                 self.tasks[area_index].remove(task)
-            elif choice is 'n':
-                print('Never mind.')
+                self.store_data()
+            elif choice in ['n', 'N', 'no', 'nah']:
+                print('Task \'%s\' in area \'%s\' was not removed.' % (task, area))
             else:
-                print('Sorry, did not recognize')
+                print('Apologies, I could not interpret your response.')
         else:
             raise TaskDoesNotExistError(task_num)
-        store_data()
 
-    def mov_task(self, task_num, ):
+    def mov_task(self, task_num, to_area):
         """
         function docstring
         Move task
         """
+
         store_data()
 
 # Definition of errors
