@@ -1,3 +1,5 @@
+from kb_errors import *
+
 class kanban(object):
     """
     class docstring
@@ -120,7 +122,9 @@ class kanban(object):
         Outputs:
             ---NONE---
         """
+        generate_display()
         print(self.display)
+        store_display()
 
     def add_task(self, task_name):
         """
@@ -135,7 +139,11 @@ class kanban(object):
         # Take first available task number
         task_nums = [int(tk.split(' ')[0]) for tks in self.tasks for tk in tks]
         filt_fun = lambda n : n not in task_nums
-        new_task_num = filter(filt_fun, range(1, max(task_nums) + 1))[0]
+        if task_nums != []
+            new_task_num = filter(filt_fun, range(1, max(task_nums) + 2))[0]
+        else:
+            new_task_num = 1
+
         # Check to see that size of first area is not exceeded
         if len(self.tasks[0]) < self.sizes[0]:
             self.tasks[0].append(str(new_task_num) + ' ' + task_name)
@@ -162,7 +170,7 @@ class kanban(object):
                         area_index = i
                         area = self.area_names[area_index]
                         task = tk
-            choice = raw_input('Do you want to remove task \'%s\' from area \'%s\'?(Y/n)' % (task, area))
+            choice = raw_input('Do you want to remove task \'%s\' from area \'%s\'? (Y/n) ' % (task, area))
             if choice in ['', 'y', 'Y', 'yes', 'ye', 'yea', 'ok', 'yeah']:
                 self.tasks[area_index].remove(task)
                 self.store_data()
@@ -175,21 +183,45 @@ class kanban(object):
 
     def mov_task(self, task_num, to_area):
         """
-        function docstring
-        Move task
+        Moves a task in the kanban board specified by the task number to another 
+        area of the kanban board. If the specified destination error does not 
+        exist, raise an AreaDoesNotExistError. If the specified destination area
+        is out of space, raise an AreaOutOfSpaceError. If the specified task 
+        does not exist, raise a TaskDoesNotExistError.
+
+        Inputs:
+            task_num: Number of task to be moved
+            to_area: Area for task to be moved to
+        Outputs:
+            ---NONE---
         """
-
-        store_data()
-
-# Definition of errors
-class Error(Exception):
-    pass
-
-class AreaOutOfSpaceError(Error):
-    def __init__(self, area):
-        self.area = area
-
-class TaskDoesNotExistError(Error):
-    def __init__(self, num):
-        self.num = num
-
+        # Find index of destination area if it exists; otherwise, raise an
+        # AreaDoesNotExistError
+        try:
+            to_area_index = self.area_names.index(to_area)
+        except ValueError:
+            raise AreaDoesNotExistError(to_area)
+        # Check to see adding the task does not exceed size of destination area
+        if self.sizes[to_area_index] < (len(self.tasks[to_area_index]) + 1):
+            raise AreaOutOfSpaceError(to_area)
+        task_nums = [int(tk.split(' ')[0]) for tks in self.tasks for tk in tks]
+        if task_num in task_nums:
+            for i in range(len(self.tasks)):
+                for tk in self.tasks[i]:
+                    if int(tk.split(' ')[0]) is task_num:
+                        area_index = i
+                        area = self.area_names[area_index]
+                        task = tk
+            choice = raw_input('Do you want to move task \'%s\' to area \'%s\'? (Y/n)' % (task, to_area))
+            if choice in ['', 'y', 'Y', 'yes', 'ye', 'yea', 'ok', 'yeah']:
+                # Append the task to be moved to destination area task list
+                self.tasks[to_area_index].append(task)
+                # Remove the task to be moved from the origin area task list
+                self.tasks[area_index].remove(task)
+                self.store_data()
+            elif choice in ['n', 'N', 'no', 'nah']:
+                print('Task \'%s\' was not moved to area \'%s\'.' % (task, to_area))
+            else:
+                print('Apologies, I could not interpret your response.')
+        else:
+            raise TaskDoesNotExistError(task_num)
