@@ -4,6 +4,7 @@
 from kanban import *
 import os
 import sys
+import datetime
 
 def main():
     in_put = ['']
@@ -109,7 +110,8 @@ def main():
 def log_errors(error):
     print(error)
     with open('error_log.txt', 'a') as f:
-        f.write(error + '\n')
+        dt = str(datetime.datetime.now())
+        f.write(dt + '\t' + error + '\n' )
 
 def create_kanban(kb_name):
     num_of_areas = input('Number of areas in new kanban board: ')
