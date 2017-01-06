@@ -122,9 +122,9 @@ class kanban(object):
         Outputs:
             ---NONE---
         """
-        generate_display()
+        self.generate_display()
         print(self.display)
-        store_display()
+        self.store_display()
 
     def add_task(self, task_name):
         """
@@ -139,7 +139,7 @@ class kanban(object):
         # Take first available task number
         task_nums = [int(tk.split(' ')[0]) for tks in self.tasks for tk in tks]
         filt_fun = lambda n : n not in task_nums
-        if task_nums != []
+        if task_nums != []:
             new_task_num = filter(filt_fun, range(1, max(task_nums) + 2))[0]
         else:
             new_task_num = 1
@@ -212,16 +212,21 @@ class kanban(object):
                         area_index = i
                         area = self.area_names[area_index]
                         task = tk
-            choice = raw_input('Do you want to move task \'%s\' to area \'%s\'? (Y/n)' % (task, to_area))
-            if choice in ['', 'y', 'Y', 'yes', 'ye', 'yea', 'ok', 'yeah']:
-                # Append the task to be moved to destination area task list
-                self.tasks[to_area_index].append(task)
-                # Remove the task to be moved from the origin area task list
-                self.tasks[area_index].remove(task)
-                self.store_data()
-            elif choice in ['n', 'N', 'no', 'nah']:
-                print('Task \'%s\' was not moved to area \'%s\'.' % (task, to_area))
-            else:
-                print('Apologies, I could not interpret your response.')
+            #choice = raw_input('Do you want to move task \'%s\' to area \'%s\'? (Y/n)' % (task, to_area))
+            #if choice in ['', 'y', 'Y', 'yes', 'ye', 'yea', 'ok', 'yeah']:
+            # Append the task to be moved to destination area task list
+            self.tasks[to_area_index].append(task)
+            # Remove the task to be moved from the origin area task list
+            self.tasks[area_index].remove(task)
+            self.store_data()
+            #elif choice in ['n', 'N', 'no', 'nah']:
+            #    print('Task \'%s\' was not moved to area \'%s\'.' % (task, to_area))
+            #else:
+            #    print('Apologies, I could not interpret your response.')
         else:
             raise TaskDoesNotExistError(task_num)
+
+
+    def clr_board(self):
+        self.tasks = len(self.tasks) * [[]]
+        self.store_data()
