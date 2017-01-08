@@ -1,4 +1,4 @@
 # Minimalist Kanban
 
-[Add full description]
+[Add complete description]
 Run main.py
