@@ -12,7 +12,7 @@ def main():
     kb = load_kanban(raw_input('Name of kanban board to create/load: '))
     while in_put[0].lower() not in ['q', 'quit']:
         in_put = (raw_input('>>> ')).split(';')
-        #Check if kanban already loaded
+        # Check if kanban already loaded
         if in_put[0] == 'lod':
             try:
                 kb_name = in_put[1]
@@ -24,6 +24,7 @@ def main():
         elif in_put[0] in ['q', 'quit']:
             if raw_input('Are you sure you want to quit? (Y/n) ').lower() in ['n', 'no', 'nah']:
                 in_put = ['']
+        # Check if kanban already loaded
         elif kb:
             if in_put[0] == 'prt':
                 kb.print_display()
@@ -134,7 +135,6 @@ def load_kanban(kb_name):
 def delete_kanban(kb_name):
     os.remove(kb_name)
     os.remove(kb_name + '-nice.txt')
-
 
 if __name__ == '__main__':
     main()

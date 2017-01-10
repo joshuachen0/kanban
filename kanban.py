@@ -134,7 +134,7 @@ class kanban(object):
         Inputs:
             task_name: Name of the task to be added
         Outputs:
-            new_task_num: Number of the added task
+            #new_task_num: Number of the added task
         """
         # Take first available task number
         task_nums = [int(tk.split(' ')[0]) for tks in self.tasks for tk in tks]
@@ -150,7 +150,7 @@ class kanban(object):
             self.store_data()
         else:
             raise AreaOutOfSpaceError(self.area_names[0])
-        return new_task_num
+        #return new_task_num
 
     def rem_task(self, task_num):
         """
